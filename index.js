@@ -4,8 +4,13 @@ const path = require('path')
 const PORT = process.env.PORT || 5001
 
 express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, '/'))
+app.use('/static', express.static(path.join(__dirname, '/')))
+  .use("/.well-known/apple-app-site-association", function (req, res) {
+  console.log(__dirname)
+  console.log(__filename)
+  res.sendFile(path.join(__dirname, "", ".well-known/apple-app-site-association"))
+  } )
+  .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
-  .get('/.well-known/apple-app-site-association', (req, res) => res.render('.well-known/apple-app-site-association'))
+  .get('/', (req, res) => res.render('pages/index'))
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
